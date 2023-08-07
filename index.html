@@ -8,6 +8,66 @@
     <title>Simple Quiz</title>
 </head>
 <body>
+    <?php
+    $questions = [
+        [
+            "question" => "What is the capital of France?",
+            "options" => ["Paris", "London", "Berlin", "Rome"],
+            "answer" => 0
+        ],
+        [
+            "question" => "What is the currency of Japan?",
+            "options" => ["Yen", "Dollar", "Euro", "Pound"],
+            "answer" => 0
+        ],
+        [
+            "question" => "What is the highest mountain in the world?",
+            "options" => ["Mount Everest", "K2", "Kangchenjunga", "Lhotse"],
+            "answer" => 0
+        ]
+    ];
+
+    $currentQuestion = 0;
+    $score = 0;
+
+    function displayQuestion() {
+        global $questions, $currentQuestion;
+        $question = $questions[$currentQuestion];
+        echo "<h2>" . $question["question"] . "</h2>";
+        echo "<ul>";
+        foreach ($question["options"] as $index => $option) {
+            echo "<li><input type='radio' name='answer' value='$index'>$option</li>";
+        }
+        echo "</ul>";
+    }
+
+    function checkAnswer() {
+        global $questions, $currentQuestion, $score;
+        if (isset($_POST["answer"])) {
+            if ($_POST["answer"] == $questions[$currentQuestion]["answer"]) {
+                $score++;
+            }
+            $currentQuestion++;
+        }
+    }
+
+    function displayScore() {
+        global $score;
+        echo "<h2>Your score: $score</h2>";
+    }
+
+    if (isset($_POST["submit"])) {
+        checkAnswer();
+    }
+
+    if ($currentQuestion < count($questions)) {
+        displayQuestion();
+        echo "<input type='submit' name='submit' value='Submit'>";
+    } else {
+        displayScore();
+    }
+?>
+
 <div id="quiz-app">
 
     <section class="center-card quiz-details" id="quiz-details">
